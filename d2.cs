@@ -4,7 +4,7 @@
     {
         internal static long solve()
         {
-            var games = lines(input).Select(line => {
+            var games = halp.lines(input).Select(line => {
                 var foo = line.Split(':');
                 var gameNo = int.Parse(foo[0].Replace("Game ", ""));
 
@@ -66,8 +66,6 @@
 
             return minimum.Sum();
         }
-
-        private static string[] lines(string text) => text.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
         private static readonly string test = @"Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
 Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
