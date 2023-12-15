@@ -11,37 +11,34 @@ internal class d5
         var maps = parts.Skip(1).Select(text =>
         {
             var rows = text.Split(Environment.NewLine);
-            return rows.Skip(1).SelectMany(r =>
+            var map = new Dictionary<long, long>();
+            Console.WriteLine(rows[0]);
+
+            for (int i = 1; i < rows.Length; i++)
             {
-                var spec = r.Split(' ').Select(halp.integer).ToArray();
-                var count = spec.Last();
+                var spec = rows[i].Split(' ').Select(halp.integer).ToArray();
+                var count = spec[2];
+                var ss = spec[1];
+                var ds = spec[0];
 
-                var source = range(spec[1]).ToArray();
-                var dest = range(spec[0]).ToArray();
-
-                return source.Zip(dest);
-
-                IEnumerable<long> range(long start)
+                for (int j = 0; j < count; j++)
                 {
-                    var until = start + count;
-                    for (long i = start; i < until; i++)
-                    {
-                        yield return i;
-                    }
+                    map.Add(ss + j, ds + j);
                 }
-            }).ToDictionary(x => x.First, x => x.Second);
+            }
+
+            return map;
         });
 
-        var saker = seeds.ToList();
+        var saker = seeds.ToArray();
 
         foreach (var map in maps)
         {
-            saker = saker.Select(sak => {
-                if (map.TryGetValue(sak, out long value))
-                    return value;
-                else
-                    return sak;
-            }).ToList();
+            for (int i = 0; i < saker.Length; i++)
+            {
+                if (map.TryGetValue(saker[i], out long value))
+                    saker[i] = value;
+            }
         }
 
         return saker.Min(); // part one lowest location
