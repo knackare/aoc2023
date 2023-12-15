@@ -11,8 +11,7 @@ internal class d5
         var maps = parts.Skip(1).Select(text =>
         {
             var rows = text.Split(Environment.NewLine);
-            var map = new Dictionary<long, long>();
-            Console.WriteLine(rows[0]);
+            var map = new List<(long ss, long ds, long count)>();
 
             for (int i = 1; i < rows.Length; i++)
             {
@@ -21,14 +20,11 @@ internal class d5
                 var ss = spec[1];
                 var ds = spec[0];
 
-                for (int j = 0; j < count; j++)
-                {
-                    map.Add(ss + j, ds + j);
-                }
+                map.Add((ss, ds, count));
             }
 
             return map;
-        });
+        }).ToList();
 
         var saker = seeds.ToArray();
 
@@ -36,8 +32,13 @@ internal class d5
         {
             for (int i = 0; i < saker.Length; i++)
             {
-                if (map.TryGetValue(saker[i], out long value))
-                    saker[i] = value;
+                var sak = saker[i];
+                var target = map.Where(m => sak >= m.ss && sak < m.ss + m.count);
+                if (target.Any())
+                {
+                    var (ss, ds, count) = target.First();
+                    saker[i] = ds + (sak - ss);
+                }
             }
         }
 
