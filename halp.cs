@@ -1,7 +1,8 @@
 ﻿namespace aoc2023;
 
-internal class halp
+internal static class halp
 {
-    public static string[] lines(string text) => text.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+    public static string[] lines(this string text) => text.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+    public static long integer(this string text) => long.Parse(text);
 }
 
