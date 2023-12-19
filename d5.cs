@@ -1,9 +1,14 @@
-﻿namespace aoc2023;
+﻿using System.Diagnostics;
+
+namespace aoc2023;
 
 internal class d5
 {
     internal static long solve()
     {
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         var parts = input.Split(Environment.NewLine + Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
         var seeds = parts[0].Split(' ').Skip(1).Select(halp.integer);
@@ -26,23 +31,60 @@ internal class d5
             return map;
         }).ToList();
 
-        var saker = seeds.ToArray();
+        //var saker = seeds.ToArray(); // part 1
+        //foreach (var map in maps)
+        //{
+        //    for (int i = 0; i < saker.Length; i++)
+        //    {
+        //        var sak = saker[i];
+        //        var target = map.Where(m => sak >= m.ss && sak < m.ss + m.count);
+        //        if (target.Any())
+        //        {
+        //            var (ss, ds, count) = target.First();
+        //            saker[i] = ds + (sak - ss);
+        //        }
+        //    }
+        //}
 
-        foreach (var map in maps)
+        //return saker.Min();
+        // -- part 1
+
+        var foo = seeds.ToArray();
+        var bar = new List<(long, long)>();
+
+        for (int i = 0; i < foo.Length; i+=2)
         {
-            for (int i = 0; i < saker.Length; i++)
+            bar.Add((foo[i], foo[i + 1]));
+        }
+
+        var lowest = long.MaxValue;
+
+        foreach (var item in bar)
+        {
+            for (var i = item.Item1; i < item.Item1 + item.Item2; i++)
             {
-                var sak = saker[i];
-                var target = map.Where(m => sak >= m.ss && sak < m.ss + m.count);
-                if (target.Any())
+                long sak = i;
+                foreach (var map in maps)
                 {
-                    var (ss, ds, count) = target.First();
-                    saker[i] = ds + (sak - ss);
+                    var target = map.Where(m => sak >= m.ss && sak < m.ss + m.count);
+                    if (target.Any())
+                    {
+                        var (ss, ds, count) = target.First();
+                        sak = ds + (sak - ss);
+                    }
+                }
+
+                if (sak < lowest)
+                {
+                    lowest = sak;
                 }
             }
         }
 
-        return saker.Min(); // part one lowest location
+        stopwatch.Stop();
+        Console.WriteLine(stopwatch.Elapsed);
+
+        return lowest;
     }
 
     private static readonly string test = @"seeds: 79 14 55 13
